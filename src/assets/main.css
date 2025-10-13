@@ -1,0 +1,349 @@
+/* 全局样式 */
+:root {
+  --primary-color: #000;
+  --secondary-color: #fff;
+  --accent-color: #333;
+  --text-color: #333;
+  --background-color: #f5f5f5;
+  --transition-speed: 0.3s;
+  --progress-bar-height: 4px;
+  --progress-bar-color: #000;
+}
+
+/* 隐藏默认滚动条 */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--transition-speed) ease;
+}
+
+ul {
+  list-style: none;
+}
+
+/* 加载器样式 */
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--background-color);
+  z-index: 1000;
+}
+
+.progress-bar {
+  width: 300px;
+  height: 2px;
+  background-color: #ddd;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.percentage {
+  font-size: 24px;
+  font-weight: 300;
+}
+
+/* 头部样式 */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 50px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.logo {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+nav ul {
+  display: flex;
+}
+
+nav ul li {
+  margin-left: 30px;
+}
+
+nav ul li a {
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+}
+
+nav ul li a:after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--primary-color);
+  transition: width var(--transition-speed) ease;
+}
+
+nav ul li a:hover:after {
+  width: 100%;
+}
+
+/* 英雄区域样式 */
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.hero-content {
+  max-width: 600px;
+}
+
+.hero h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.hero h2 {
+  font-size: 36px;
+  font-weight: 300;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 18px;
+  margin-bottom: 40px;
+  line-height: 1.8;
+}
+
+.cta-button a {
+  display: inline-block;
+  padding: 15px 30px;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border-radius: 30px;
+  font-weight: 500;
+  transition: all var(--transition-speed) ease;
+}
+
+.cta-button a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 服务区域样式 */
+.service {
+  display: flex;
+  padding: 100px 50px;
+  min-height: 50vh;
+  align-items: center;
+}
+
+.service-number {
+  font-size: 120px;
+  font-weight: 700;
+  opacity: 0.1;
+  margin-right: 50px;
+}
+
+.service-content {
+  max-width: 500px;
+}
+
+.service-content h2 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.service-content p {
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+/* 社交媒体区域 */
+.social {
+  padding: 50px;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+}
+
+.social ul {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.social ul li {
+  margin: 0 20px;
+}
+
+.social ul li a {
+  font-size: 16px;
+  font-weight: 500;
+  position: relative;
+}
+
+.social ul li a:after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--secondary-color);
+  transition: width var(--transition-speed) ease;
+}
+
+.social ul li a:hover:after {
+  width: 100%;
+}
+
+/* 联系区域 */
+.contact {
+  padding: 100px 50px;
+  text-align: center;
+}
+
+.contact h2 {
+  font-size: 36px;
+  margin-bottom: 50px;
+  font-weight: 500;
+}
+
+form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color var(--transition-speed) ease;
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+button {
+  display: inline-block;
+  padding: 15px 30px;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 页脚样式 */
+footer {
+  padding: 30px 50px;
+  text-align: center;
+  font-size: 14px;
+  color: #777;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  header {
+    padding: 20px;
+    flex-direction: column;
+  }
+
+  nav ul {
+    margin-top: 20px;
+  }
+
+  nav ul li {
+    margin: 0 10px;
+  }
+
+  .service {
+    flex-direction: column;
+    padding: 50px 20px;
+    text-align: center;
+  }
+
+  .service-number {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  .social ul li {
+    margin: 10px 15px;
+  }
+
+  .contact {
+    padding: 50px 20px;
+  }
+}
