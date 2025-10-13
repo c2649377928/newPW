@@ -49,8 +49,8 @@ const scale = ref(1.0)
 const loading = ref(true)
 const pdfError = ref('')
 
-// PDF文件路径
-const resumeUrl = '/resume.pdf' // 假设PDF文件放在public目录下
+// PDF文件路径 - 适配GitHub Pages路径
+const resumeUrl = './resume.pdf' // 使用相对路径适配GitHub Pages
 
 // 下载简历
 const downloadResume = () => {
