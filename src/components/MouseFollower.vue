@@ -14,14 +14,14 @@
 <script setup>
 import { ref, reactive, onMounted, onUnmounted, computed } from 'vue';
 
-// 鼠标位置
+// 鼠标/触摸位置
 const position = reactive({ x: 0, y: 0 });
-// 鼠标是否在页面内
+// 光标是否可见
 const isVisible = ref(false);
 // 鼠标是否按下
 const isMouseDown = ref(false);
 
-// 限制鼠标位置在视口范围内
+// 限制光标位置在视口范围内
 const clampedPosition = computed(() => {
   return {
     x: Math.max(0, Math.min(position.x, window.innerWidth)),
@@ -52,6 +52,39 @@ const handleThemeChange = (event) => {
 const handleMouseMove = (e) => {
   position.x = e.clientX;
   position.y = e.clientY;
+  if (!isVisible.value) {
+    isVisible.value = true;
+  }
+};
+
+// 触摸移动处理函数
+const handleTouchMove = (e) => {
+  if (e.touches.length > 0) {
+    position.x = e.touches[0].clientX;
+    position.y = e.touches[0].clientY;
+    if (!isVisible.value) {
+      isVisible.value = true;
+    }
+  }
+};
+
+// 触摸开始处理函数
+const handleTouchStart = (e) => {
+  if (e.touches.length > 0) {
+    position.x = e.touches[0].clientX;
+    position.y = e.touches[0].clientY;
+    isMouseDown.value = true;
+    isVisible.value = true;
+  }
+};
+
+// 触摸结束处理函数
+const handleTouchEnd = () => {
+  isMouseDown.value = false;
+  // 在触摸结束后保持光标可见一段时间
+  setTimeout(() => {
+    isVisible.value = false;
+  }, 1000);
 };
 
 // 鼠标按下处理函数
@@ -80,18 +113,32 @@ onMounted(() => {
   const currentDocTheme = document.documentElement.getAttribute('data-theme') || 'light';
   currentTheme.value = currentDocTheme;
   
+  // 鼠标事件监听器（桌面端）
   window.addEventListener('mousemove', handleMouseMove);
   window.addEventListener('mousedown', handleMouseDown);
   window.addEventListener('mouseup', handleMouseUp);
+  
+  // 触摸事件监听器（移动端）
+  window.addEventListener('touchstart', handleTouchStart);
+  window.addEventListener('touchmove', handleTouchMove);
+  window.addEventListener('touchend', handleTouchEnd);
+  
+  // 主题变化监听器
   window.addEventListener('theme-changed', handleThemeChange);
+  
+  // 鼠标进入/离开页面事件
   document.addEventListener('mouseenter', handleMouseEnter);
   document.addEventListener('mouseleave', handleMouseLeave);
 });
 
 onUnmounted(() => {
+  // 移除所有事件监听器
   window.removeEventListener('mousemove', handleMouseMove);
   window.removeEventListener('mousedown', handleMouseDown);
   window.removeEventListener('mouseup', handleMouseUp);
+  window.removeEventListener('touchstart', handleTouchStart);
+  window.removeEventListener('touchmove', handleTouchMove);
+  window.removeEventListener('touchend', handleTouchEnd);
   window.removeEventListener('theme-changed', handleThemeChange);
   document.removeEventListener('mouseenter', handleMouseEnter);
   document.removeEventListener('mouseleave', handleMouseLeave);
