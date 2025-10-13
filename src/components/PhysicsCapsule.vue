@@ -130,11 +130,16 @@ const initPhysics = () => {
   Matter.World.add(engine.world, mouseConstraint);
   render.mouse = mouseConstraint.mouse;
   
-  // 添加移动端触摸支持
+  // 改进移动端触摸支持
   const canvas = render.canvas;
   canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
   canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
   canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+  
+  // 确保鼠标约束能够正确处理触摸事件
+  mouseConstraint.mouse.element.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+  }, { passive: false });
 
   // 运行引擎和渲染器
   runner = Matter.Runner.create();
@@ -345,10 +350,22 @@ function handleTouchStart(event) {
     
     const touch = event.touches[0];
     const mouse = mouseConstraint.mouse;
-    mouse.element.dispatchEvent(new MouseEvent('mousedown', {
+    
+    // 设置鼠标位置
+    mouse.position.x = touch.clientX;
+    mouse.position.y = touch.clientY;
+    
+    // 创建并触发mousedown事件
+    const mouseEvent = new MouseEvent('mousedown', {
+      bubbles: true,
+      cancelable: true,
       clientX: touch.clientX,
-      clientY: touch.clientY
-    }));
+      clientY: touch.clientY,
+      view: window
+    });
+    
+    // 直接在canvas上触发事件
+    mouse.element.dispatchEvent(mouseEvent);
   }
 }
 
@@ -358,10 +375,22 @@ function handleTouchMove(event) {
     
     const touch = event.touches[0];
     const mouse = mouseConstraint.mouse;
-    mouse.element.dispatchEvent(new MouseEvent('mousemove', {
+    
+    // 更新鼠标位置
+    mouse.position.x = touch.clientX;
+    mouse.position.y = touch.clientY;
+    
+    // 创建并触发mousemove事件
+    const mouseEvent = new MouseEvent('mousemove', {
+      bubbles: true,
+      cancelable: true,
       clientX: touch.clientX,
-      clientY: touch.clientY
-    }));
+      clientY: touch.clientY,
+      view: window
+    });
+    
+    // 直接在canvas上触发事件
+    mouse.element.dispatchEvent(mouseEvent);
   }
 }
 
@@ -369,7 +398,20 @@ function handleTouchEnd(event) {
   event.preventDefault();
   
   const mouse = mouseConstraint.mouse;
-  mouse.element.dispatchEvent(new MouseEvent('mouseup'));
+  
+  // 创建并触发mouseup事件
+  const mouseEvent = new MouseEvent('mouseup', {
+    bubbles: true,
+    cancelable: true,
+    view: window
+  });
+  
+  // 直接在canvas上触发事件
+  mouse.element.dispatchEvent(mouseEvent);
+  
+  // 重置鼠标位置
+  mouse.position.x = 0;
+  mouse.position.y = 0;
 }
 
 // 添加主题变化处理函数
