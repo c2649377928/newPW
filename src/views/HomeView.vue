@@ -32,11 +32,9 @@
     <!-- 英雄区域 -->
     <section class="hero">
       <div class="hero-content">
-        <TextAnimation>
-          <h1>我是陈相羽</h1>
-        </TextAnimation>
-        <h2>目前是一个前端开发工程师</h2>
-        <p>致力于制作优雅、高质量的代码，培养强大的开发实践，并提供卓越的用户体验。目标是不断进步，在开发中接触和学习后端知识，向全栈开发工程师靠拢。</p>
+        <h1 ref="heroTitle">我是陈相羽</h1>
+        <h2 ref="heroSubtitle">目前是一个前端开发工程师</h2>
+        <p ref="heroDescription">致力于制作优雅、高质量的代码，培养强大的开发实践，并提供卓越的用户体验。目标是不断进步，在开发中接触和学习后端知识，向全栈开发工程师靠拢。</p>
       </div>
     </section>
     
@@ -71,51 +69,11 @@
     <!-- 服务区域 -->
     <div class="services-container">
       <div class="services-wrapper">
-        <section class="service">
-          <div class="service-number">01</div>
+        <section class="service" v-for="(service, index) in services" :key="index" :ref="(el) => { if (el) serviceRefs[index] = el }">
+          <div class="service-number">{{ service.number }}</div>
           <div class="service-content">
-            <h2>提升技能</h2>
-            <p>挑战自己。找到您以前从未使用过的技术并了解更多信息。尝试一下。用它做点什么。尝试每天学习一些小东西。</p>
-          </div>
-        </section>
-        
-        <section class="service">
-          <div class="service-number">02</div>
-          <div class="service-content">
-            <h2>保持专注</h2>
-            <p>创建一个待办事项列表，进一步分解任务、确定优先级。不要试图同时处理多项任务，这会让你的注意力分散并且降低效率。</p>
-          </div>
-        </section>
-        
-        <section class="service">
-          <div class="service-number">03</div>
-          <div class="service-content">
-            <h2>归属感</h2>
-            <p>团队中的归属感通过培养信任、目标和开放的沟通将混乱转化为协作。有了它，每个人都可以团结一致、投入并能够自由贡献，从而形成一个有凝聚力和高效的团队。</p>
-          </div>
-        </section>
-        
-        <section class="service">
-          <div class="service-number">04</div>
-          <div class="service-content">
-            <h2>AI 编程“效率幻觉”</h2>
-            <p>单纯依赖 AI 进行碎片化的代码生成，只会让我们陷入“效率幻觉”的陷阱。未来的编程不再仅仅是编写代码，而是通过规范来定义和传达意图。如何有效利用这些工具，挖掘其潜力，将是每位开发者面临的挑战。</p>
-          </div>
-        </section>
-        
-        <section class="service">
-          <div class="service-number">05</div>
-          <div class="service-content">
-            <h2>以产品为中心</h2>
-            <p>作为一名工程师，如果你想在这个领域继续发展，你需要开始将自己视为软件的生产者，而不仅仅是编码员。</p>
-          </div>
-        </section>
-        
-        <section class="service">
-          <div class="service-number">06</div>
-          <div class="service-content">
-            <h2>Agent</h2>
-            <p>未来每个人都会拥有属于自己的AI Agent，就像现在每个人都有一个手机一样。Agent的出现，并不是为了取代人类，而是让我们从重复、琐碎的工作中解放出来，去做更有创造性、更有人情味的事情。</p>
+            <h2 :ref="(el) => { if (el) serviceTitleRefs[index] = el }">{{ service.title }}</h2>
+            <p :ref="(el) => { if (el) serviceDescRefs[index] = el }">{{ service.description }}</p>
           </div>
         </section>
       </div>
@@ -134,6 +92,16 @@
         <PhysicsCapsule />
     </section>
 
+    <!-- GSAP动画示例组件 -->
+    <section class="gsap-demo">
+      <GsapExample />
+    </section>
+    
+    <!-- GSAP ScrollTrigger示例组件 -->
+    <section class="gsap-scroll-demo">
+      <GsapScrollDemo />
+    </section>
+
     <ResumeViewer />
     
     <!-- 底部滚动进度条 -->
@@ -143,13 +111,20 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import MouseFollower from '../components/MouseFollower.vue';
-import TextAnimation from '../components/TextAnimation.vue';
 import RotatingModel from '../components/RotatingModel.vue';
 import PhysicsCapsule from '../components/PhysicsCapsule.vue';
 import ScrollProgress from '../components/ScrollProgress.vue';
 import ResumeViewer from '../components/ResumeViewer.vue';
+import GsapExample from '../components/GsapExample.vue';
+import GsapScrollDemo from '../components/GsapScrollDemo.vue';
 import { useScrollAnimation } from '../assets/animations';
+import { useGsapTextStagger } from '../assets/gsapAnimations';
+
+// 注册ScrollTrigger插件
+gsap.registerPlugin(ScrollTrigger);
 
 // 导入SVG图标
 import htmlIcon from '../assets/icons/html5.svg';
@@ -161,10 +136,17 @@ import gitIcon from '../assets/icons/git.svg';
 
 // 滚动动画
 const { animateOnScroll } = useScrollAnimation();
+const { createTextStagger, createScrollStagger } = useGsapTextStagger();
 
 // 引用DOM元素
 const leftTitle = ref(null);
 const rightTitle = ref(null);
+const heroTitle = ref(null);
+const heroSubtitle = ref(null);
+const heroDescription = ref(null);
+const serviceRefs = ref([]);
+const serviceTitleRefs = ref([]);
+const serviceDescRefs = ref([]);
 
 // 当前时间
 const currentTime = ref('');
@@ -194,6 +176,40 @@ const cards = ref([
   {
     title: "Git",
     icon: gitIcon
+  }
+]);
+
+// 服务数据
+const services = ref([
+  {
+    number: "01",
+    title: "提升技能",
+    description: "挑战自己。找到您以前从未使用过的技术并了解更多信息。尝试一下。用它做点什么。尝试每天学习一些小东西。"
+  },
+  {
+    number: "02",
+    title: "保持专注",
+    description: "创建一个待办事项列表，进一步分解任务、确定优先级。不要试图同时处理多项任务，这会让你的注意力分散并且降低效率。"
+  },
+  {
+    number: "03",
+    title: "归属感",
+    description: "团队中的归属感通过培养信任、目标和开放的沟通将混乱转化为协作。有了它，每个人都可以团结一致、投入并能够自由贡献，从而形成一个有凝聚力和高效的团队。"
+  },
+  {
+    number: "04",
+    title: "AI 编程\"效率幻觉\"",
+    description: "单纯依赖 AI 进行碎片化的代码生成，只会让我们陷入\"效率幻觉\"的陷阱。未来的编程不再仅仅是编写代码，而是通过规范来定义和传达意图。如何有效利用这些工具，挖掘其潜力，将是每位开发者面临的挑战。"
+  },
+  {
+    number: "05",
+    title: "以产品为中心",
+    description: "作为一名工程师，如果你想在这个领域继续发展，你需要开始将自己视为软件的生产者，而不仅仅是编码员。"
+  },
+  {
+    number: "06",
+    title: "Agent",
+    description: "未来每个人都会拥有属于自己的AI Agent，就像现在每个人都有一个手机一样。Agent的出现，并不是为了取代人类，而是让我们从重复、琐碎的工作中解放出来，去做更有创造性、更有人情味的事情。"
   }
 ]);
 
@@ -326,6 +342,75 @@ const stopAutoScroll = () => {
   isAutoScrolling.value = false;
 };
 
+// GSAP文本交错动画
+const initTextStaggerAnimations = () => {
+  // 英雄区域文本动画
+  if (heroTitle.value) {
+    gsap.from(heroTitle.value, {
+      opacity: 0,
+      y: 30,
+      duration: 1.2,
+      delay: 0.2
+    });
+  }
+  
+  if (heroSubtitle.value) {
+    gsap.from(heroSubtitle.value, {
+      opacity: 0,
+      y: 30,
+      duration: 1.2,
+      delay: 0.6
+    });
+  }
+  
+  if (heroDescription.value) {
+    gsap.from(heroDescription.value, {
+      opacity: 0,
+      y: 30,
+      duration: 1.2,
+      delay: 1.0
+    });
+  }
+  
+  // 服务区域标题动画
+  setTimeout(() => {
+    // 确保元素已经渲染完成
+    if (serviceTitleRefs.value && serviceTitleRefs.value.length > 0) {
+      // 过滤掉空值
+      const validTitleRefs = serviceTitleRefs.value.filter(ref => ref !== null);
+      if (validTitleRefs.length > 0) {
+        createScrollStagger(validTitleRefs, {
+          duration: 1.0,  // 增加动画持续时间，使动画更平缓
+          y: 30,
+          stagger: 0.2,   // 增加交错延迟，使每个元素的动画间隔更明显
+          scrollTrigger: {
+            start: "top 85%",
+            toggleActions: "play none none reverse"
+          }
+        });
+      }
+    }
+    
+    // 服务区域描述动画
+    if (serviceDescRefs.value && serviceDescRefs.value.length > 0) {
+      // 过滤掉空值
+      const validDescRefs = serviceDescRefs.value.filter(ref => ref !== null);
+      if (validDescRefs.length > 0) {
+        createScrollStagger(validDescRefs, {
+          duration: 1.0,  // 增加动画持续时间，使动画更平缓
+          y: 30,
+          stagger: 0.2,   // 增加交错延迟，使每个元素的动画间隔更明显
+          delay: 0.2,     // 增加初始延迟，使描述动画在标题之后更明显地出现
+          scrollTrigger: {
+            start: "top 90%",
+            toggleActions: "play none none reverse"
+          }
+        });
+      }
+    }
+  }, 1000);
+};
+
 // 提交表单
 const submitForm = () => {
   console.log('Form submitted:', form.value);
@@ -337,6 +422,9 @@ const submitForm = () => {
     message: ''
   };
 };
+
+// 在 script setup 的顶层声明 timeInterval
+let timeInterval = null;
 
 // 页面加载完成后初始化自动滚动
 onMounted(() => {
@@ -356,12 +444,32 @@ onMounted(() => {
     initAutoScroll();
   }, 3000); // 3秒后开始自动滚动
   
-  // 确保组件销毁时清理定时器
-  onUnmounted(() => {
+  // 初始化文本交错动画
+  setTimeout(() => {
+    initTextStaggerAnimations();
+    
+    // 刷新ScrollTrigger以确保所有动画正确注册
+    ScrollTrigger.refresh();
+  }, 1500); // 从1000增加到1500毫秒
+  
+  // 再次刷新确保所有内容加载完成
+  setTimeout(() => {
+    ScrollTrigger.refresh();
+  }, 3500); // 从3000增加到3500毫秒
+});
+
+// 确保组件销毁时清理定时器和事件监听器
+onUnmounted(() => {
+  if (timeInterval) {
     clearInterval(timeInterval);
-    window.removeEventListener('scroll', animateOnScroll);
-    window.removeEventListener('scroll', handleTitleAnimation);
-  });
+  }
+  window.removeEventListener('scroll', animateOnScroll);
+  window.removeEventListener('scroll', handleTitleAnimation);
+  
+  // 清理ScrollTrigger
+  if (typeof ScrollTrigger !== 'undefined') {
+    ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+  }
 });
 </script>
 
@@ -608,7 +716,6 @@ onMounted(() => {
 .service-content p {
   font-size: 1.1rem;
   line-height: 1.6;
-  opacity: 0.8;
 }
 
 /* 卡片容器样式 */
@@ -743,6 +850,17 @@ onMounted(() => {
   transform: translateY(-2px);
 }
 
+/* GSAP示例区域样式 */
+.gsap-demo {
+  padding: 5rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.gsap-scroll-demo {
+  margin-top: 5rem;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .header-section {
@@ -801,88 +919,31 @@ onMounted(() => {
     display: none;
   }
   
-  .card {
-    min-width: 150px;
-    flex: 0 0 auto;
-    padding: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
+  .mobile-cards-wrapper {
+    display: block;
   }
   
-  .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
-  
-  .card-icon {
-    width: 48px;
-    height: 48px;
-  }
-  
-  .card h3 {
-    font-size: 1rem;
-  }
-  
-  /* 按钮容器样式 */
-  .scroll-btn-container {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
-    width: 100%;
-  }
-  
-  /* 滚动按钮样式 */
-  .scroll-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-    z-index: 2;
-    color: #000; /* 默认浅色主题下的图标颜色 */
-  }
-
-  .scroll-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
-  }
-
-  /* 深色主题下的按钮样式 */
-  @media (prefers-color-scheme: dark) {
-    .scroll-btn {
-      color: #fff; /* 深色主题下的图标颜色 */
-    }
-  }
-
-  /* 手动设置深色主题下的按钮样式 */
-  [data-theme="dark"] .scroll-btn {
-    color: #fff; /* 深色主题下的图标颜色 */
-  }
-
-  .scroll-btn svg {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .services-container {
-    flex-direction: column;
+  .gsap-demo {
+    padding: 2rem 1rem;
   }
 }
 
-
 @media (min-width: 769px) {
+  .cards-container.mobile-cards {
+    display: none;
+  }
+  
   .mobile-cards-wrapper {
     display: none;
   }
+}
+
+/* GSAP动画相关样式 */
+.service-content h2, .service-content p {
+  will-change: transform, opacity;
+}
+
+.hero-content h1, .hero-content h2, .hero-content p {
+  will-change: transform, opacity;
 }
 </style>

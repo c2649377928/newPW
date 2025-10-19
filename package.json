@@ -16,6 +16,7 @@
   "dependencies": {
     "@types/matter-js": "^0.20.2",
     "@vue-office/pdf": "^2.0.10",
+    "gsap": "^3.13.0",
     "matter-js": "^0.20.0",
     "pdfjs-dist": "^5.4.296",
     "pinia": "^3.0.3",
