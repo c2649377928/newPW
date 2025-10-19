@@ -92,15 +92,7 @@
         <PhysicsCapsule />
     </section>
 
-    <!-- GSAP动画示例组件 -->
-    <section class="gsap-demo">
-      <GsapExample />
-    </section>
-    
-    <!-- GSAP ScrollTrigger示例组件 -->
-    <section class="gsap-scroll-demo">
-      <GsapScrollDemo />
-    </section>
+
 
     <ResumeViewer />
     
@@ -118,8 +110,6 @@ import RotatingModel from '../components/RotatingModel.vue';
 import PhysicsCapsule from '../components/PhysicsCapsule.vue';
 import ScrollProgress from '../components/ScrollProgress.vue';
 import ResumeViewer from '../components/ResumeViewer.vue';
-import GsapExample from '../components/GsapExample.vue';
-import GsapScrollDemo from '../components/GsapScrollDemo.vue';
 import { useScrollAnimation } from '../assets/animations';
 import { useGsapTextStagger } from '../assets/gsapAnimations';
 
