@@ -50,7 +50,7 @@
       <div class="scroll-btn-container">
         <button class="scroll-btn left" @click="scrollLeft">
           <span>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="scroll-icon" style="color: inherit;">
             <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           </span>
@@ -58,7 +58,7 @@
         
         <button class="scroll-btn right" @click="scrollRight">
           <span>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="scroll-icon" style="color: inherit;">
             <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
           </span>
@@ -849,6 +849,70 @@ onUnmounted(() => {
 
 .gsap-scroll-demo {
   margin-top: 5rem;
+}
+
+/* 移动端滚动按钮样式 */
+.scroll-btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.scroll-btn {
+  background: rgba(255, 255, 255, 0.2); /* 半透明白色背景 */
+  border: 1px solid rgba(255, 255, 255, 0.5); /* 提高边框透明度 */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white; /* 默认白色图标 */
+  backdrop-filter: blur(5px); /* 添加背景模糊效果 */
+}
+
+.scroll-icon {
+  width: 24px;
+  height: 24px;
+  color: inherit; /* 继承父元素颜色 */
+  stroke: currentColor; /* 确保SVG路径使用当前颜色 */
+}
+
+.scroll-btn:hover {
+  background: rgba(255, 255, 255, 0.3); /* 悬停时加深背景 */
+  border-color: rgba(255, 255, 255, 0.7); /* 提高悬停时边框透明度 */
+  transform: scale(1.1);
+}
+
+/* 深色主题适配 */
+:root[data-theme="dark"] .scroll-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* 添加阴影提高可见性 */
+}
+
+:root[data-theme="dark"] .scroll-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* 浅色主题适配 */
+:root[data-theme="light"] .scroll-btn {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  color: black;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="light"] .scroll-btn:hover {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* 响应式设计 */
